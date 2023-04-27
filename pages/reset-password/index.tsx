@@ -1,6 +1,7 @@
 import {
   Button,
   Container,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -54,39 +55,44 @@ const ForgotPassword = () => {
   };
 
   return (
-    <Container maxW="md" py={{ base: '12', md: '24' }}>
-      <Stack spacing="8">
-        <Stack spacing="6">
-          <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-            <Heading size={{ base: 'xs', md: 'sm' }}>Forgot Password</Heading>
-          </Stack>
-        </Stack>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing="6">
-            <Stack spacing="20px">
-              <FormControl id="email">
-                <FormLabel srOnly>Email address</FormLabel>
-                <Input
-                  {...register('email')}
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  roundedBottom="0"
-                />
-                <FormHelperText color="red">
-                  {errors?.email?.message}
-                </FormHelperText>
-              </FormControl>
-            </Stack>
+    <Flex justifyContent="center" alignItems="center" minH="100vh">
+      <Container
+        maxW="sm"
+        py={{ base: 3, md: 6 }}
+        background="#F9F6F5"
+        borderRadius="md"
+      >
+        <Stack spacing="8">
+          <Heading size={{ base: 'sm', md: 'lg' }} textAlign="center">
+            Forgot Password
+          </Heading>
 
-            <Stack spacing="4">
-              <Button type="submit">Send Request</Button>
-              <Text color="red">{response ? response : ''}</Text>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing="6">
+              <Stack spacing="20px">
+                <FormControl id="email">
+                  <FormLabel srOnly>Email address</FormLabel>
+                  <Input
+                    {...register('email')}
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                  />
+                  <FormHelperText color="red">
+                    {errors?.email?.message}
+                  </FormHelperText>
+                </FormControl>
+              </Stack>
+
+              <Stack spacing="4">
+                <Button type="submit">Send Request</Button>
+                <Text color="red">{response ? response : ''}</Text>
+              </Stack>
             </Stack>
-          </Stack>
-        </form>
-      </Stack>
-    </Container>
+          </form>
+        </Stack>
+      </Container>
+    </Flex>
   );
 };
 

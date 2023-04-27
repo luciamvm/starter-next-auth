@@ -1,6 +1,7 @@
 import {
   Button,
   Container,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -71,87 +72,89 @@ const ResetPassword = () => {
   };
 
   return (
-    <Container maxW="md" py={{ base: '12', md: '24' }}>
-      <Stack spacing="8">
-        <Stack spacing="6">
-          <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-            <Heading size={{ base: 'xs', md: 'sm' }}>
-              Define your new password
-            </Heading>
-          </Stack>
+    <Flex justifyContent="center" alignItems="center" minH="100vh">
+      <Container
+        maxW="sm"
+        py={{ base: 3, md: 6 }}
+        background="#F9F6F5"
+        borderRadius="md"
+      >
+        <Stack spacing={8}>
+          <Heading size={{ base: 'sm', md: 'lg' }} textAlign="center">
+            Reset password
+          </Heading>
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing="6">
+              <Stack spacing="20px">
+                <FormControl id="password">
+                  <FormLabel srOnly>Password</FormLabel>
+                  <InputGroup>
+                    <Input
+                      {...register('password')}
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="New password"
+                    />
+                    <InputRightElement
+                      cursor="pointer"
+                      onClick={() =>
+                        showPassword
+                          ? setShowPassword(false)
+                          : setShowPassword(true)
+                      }
+                    >
+                      {showPassword ? (
+                        <AiOutlineEye />
+                      ) : (
+                        <AiOutlineEyeInvisible />
+                      )}
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormHelperText color="red">
+                    {errors?.password?.message}
+                  </FormHelperText>
+                </FormControl>
+                <FormControl id="passwordConfirmation">
+                  <FormLabel srOnly>Confirm password</FormLabel>
+
+                  <InputGroup>
+                    <Input
+                      {...register('passwordConfirmation')}
+                      name="passwordConfirmation"
+                      type={showPasswordConfirmation ? 'text' : 'password'}
+                      placeholder="Confirm password"
+                    />
+                    <InputRightElement
+                      cursor="pointer"
+                      onClick={() =>
+                        showPasswordConfirmation
+                          ? setShowPasswordConfirmation(false)
+                          : setShowPasswordConfirmation(true)
+                      }
+                    >
+                      {showPasswordConfirmation ? (
+                        <AiOutlineEye />
+                      ) : (
+                        <AiOutlineEyeInvisible />
+                      )}
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormHelperText color="red">
+                    {errors?.passwordConfirmation?.message}
+                  </FormHelperText>
+                </FormControl>
+              </Stack>
+
+              <Stack spacing="4">
+                <Button type="submit">Send Request</Button>
+                <Text color="red">{response ? response : ''}</Text>
+              </Stack>
+            </Stack>
+          </form>
         </Stack>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing="6">
-            <Stack spacing="20px">
-              <FormControl id="password">
-                <FormLabel srOnly>Password</FormLabel>
-                <InputGroup>
-                  <Input
-                    {...register('password')}
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="New password"
-                    roundedBottom="0"
-                  />
-                  <InputRightElement
-                    cursor="pointer"
-                    onClick={() =>
-                      showPassword
-                        ? setShowPassword(false)
-                        : setShowPassword(true)
-                    }
-                  >
-                    {showPassword ? (
-                      <AiOutlineEye />
-                    ) : (
-                      <AiOutlineEyeInvisible />
-                    )}
-                  </InputRightElement>
-                </InputGroup>
-                <FormHelperText color="red">
-                  {errors?.password?.message}
-                </FormHelperText>
-              </FormControl>
-              <FormControl id="passwordConfirmation">
-                <FormLabel srOnly>Confirm password</FormLabel>
-
-                <InputGroup>
-                  <Input
-                    {...register('passwordConfirmation')}
-                    name="passwordConfirmation"
-                    type={showPasswordConfirmation ? 'text' : 'password'}
-                    placeholder="Confirm password"
-                    roundedBottom="0"
-                  />
-                  <InputRightElement
-                    cursor="pointer"
-                    onClick={() =>
-                      showPasswordConfirmation
-                        ? setShowPasswordConfirmation(false)
-                        : setShowPasswordConfirmation(true)
-                    }
-                  >
-                    {showPasswordConfirmation ? (
-                      <AiOutlineEye />
-                    ) : (
-                      <AiOutlineEyeInvisible />
-                    )}
-                  </InputRightElement>
-                </InputGroup>
-                <FormHelperText color="red">
-                  {errors?.passwordConfirmation?.message}
-                </FormHelperText>
-              </FormControl>
-            </Stack>
-
-            <Stack spacing="4">
-              <Button type="submit">Send Request</Button>
-              <Text color="red">{response ? response : ''}</Text>
-            </Stack>
-          </Stack>
-        </form>
-      </Stack>
-    </Container>
+      </Container>
+    </Flex>
   );
 };
 

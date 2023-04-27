@@ -1,6 +1,7 @@
 import {
   Button,
   Container,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -80,108 +81,113 @@ const Register = () => {
     }
   };
   return (
-    <Container maxW="md" py={{ base: '12', md: '24' }}>
-      <Stack spacing="8">
-        <Heading size={{ base: 'xs', md: 'sm' }}>Create an account</Heading>
+    <Flex justifyContent="center" alignItems="center" minH="100vh">
+      <Container
+        maxW="sm"
+        py={{ base: 3, md: 6 }}
+        background="#F9F6F5"
+        borderRadius="md"
+      >
+        <Stack spacing="8">
+          <Heading size={{ base: 'sm', md: 'lg' }} textAlign="center">
+            Create an account
+          </Heading>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing="6">
-            <Stack spacing="20px">
-              <FormControl id="name">
-                <FormLabel srOnly>Your name</FormLabel>
-                <Input
-                  {...register('name')}
-                  name="name"
-                  type="text"
-                  placeholder="name"
-                  roundedBottom="0"
-                />
-                <FormHelperText color="red">
-                  {errors?.email?.message}
-                </FormHelperText>
-              </FormControl>
-              <FormControl id="email">
-                <FormLabel srOnly>Email address</FormLabel>
-                <Input
-                  {...register('email')}
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  roundedBottom="0"
-                />
-                <FormHelperText color="red">
-                  {errors?.email?.message}
-                </FormHelperText>
-              </FormControl>
-              <FormControl id="password">
-                <FormLabel srOnly>Password</FormLabel>
-                <InputGroup>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing={8}>
+              <Stack spacing={6}>
+                <FormControl id="name">
+                  <FormLabel srOnly>Your name</FormLabel>
                   <Input
-                    {...register('password')}
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Password"
-                    roundedTop="0"
+                    {...register('name')}
+                    name="name"
+                    type="text"
+                    placeholder="Name"
                   />
-                  <InputRightElement
-                    cursor="pointer"
-                    onClick={() =>
-                      showPassword
-                        ? setShowPassword(false)
-                        : setShowPassword(true)
-                    }
-                  >
-                    {showPassword ? (
-                      <AiOutlineEye />
-                    ) : (
-                      <AiOutlineEyeInvisible />
-                    )}
-                  </InputRightElement>
-                </InputGroup>
-                <FormHelperText color="red">
-                  {errors?.password?.message}
-                </FormHelperText>
-              </FormControl>
-              <FormControl id="passwordConfirmation">
-                <FormLabel srOnly>Confirm password</FormLabel>
-
-                <InputGroup>
+                  <FormHelperText color="red">
+                    {errors?.email?.message}
+                  </FormHelperText>
+                </FormControl>
+                <FormControl id="email">
+                  <FormLabel srOnly>Email address</FormLabel>
                   <Input
-                    {...register('passwordConfirmation')}
-                    name="passwordConfirmation"
-                    type={showPasswordConfirmation ? 'text' : 'password'}
-                    placeholder="Confirm password"
-                    roundedBottom="0"
+                    {...register('email')}
+                    name="email"
+                    type="email"
+                    placeholder="Email"
                   />
-                  <InputRightElement
-                    cursor="pointer"
-                    onClick={() =>
-                      showPasswordConfirmation
-                        ? setShowPasswordConfirmation(false)
-                        : setShowPasswordConfirmation(true)
-                    }
-                  >
-                    {showPasswordConfirmation ? (
-                      <AiOutlineEye />
-                    ) : (
-                      <AiOutlineEyeInvisible />
-                    )}
-                  </InputRightElement>
-                </InputGroup>
-                <FormHelperText color="red">
-                  {errors?.passwordConfirmation?.message}
-                </FormHelperText>
-              </FormControl>
-            </Stack>
+                  <FormHelperText color="red">
+                    {errors?.email?.message}
+                  </FormHelperText>
+                </FormControl>
+                <FormControl id="password">
+                  <FormLabel srOnly>Password</FormLabel>
+                  <InputGroup>
+                    <Input
+                      {...register('password')}
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Password"
+                    />
+                    <InputRightElement
+                      cursor="pointer"
+                      onClick={() =>
+                        showPassword
+                          ? setShowPassword(false)
+                          : setShowPassword(true)
+                      }
+                    >
+                      {showPassword ? (
+                        <AiOutlineEye />
+                      ) : (
+                        <AiOutlineEyeInvisible />
+                      )}
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormHelperText color="red">
+                    {errors?.password?.message}
+                  </FormHelperText>
+                </FormControl>
+                <FormControl id="passwordConfirmation">
+                  <FormLabel srOnly>Confirm password</FormLabel>
 
-            <Stack spacing="4">
-              <Button type="submit">Submit</Button>
-              <Text color="red">{response ? response : ''}</Text>
+                  <InputGroup>
+                    <Input
+                      {...register('passwordConfirmation')}
+                      name="passwordConfirmation"
+                      type={showPasswordConfirmation ? 'text' : 'password'}
+                      placeholder="Confirm password"
+                    />
+                    <InputRightElement
+                      cursor="pointer"
+                      onClick={() =>
+                        showPasswordConfirmation
+                          ? setShowPasswordConfirmation(false)
+                          : setShowPasswordConfirmation(true)
+                      }
+                    >
+                      {showPasswordConfirmation ? (
+                        <AiOutlineEye />
+                      ) : (
+                        <AiOutlineEyeInvisible />
+                      )}
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormHelperText color="red">
+                    {errors?.passwordConfirmation?.message}
+                  </FormHelperText>
+                </FormControl>
+              </Stack>
+
+              <Stack spacing="4">
+                <Button type="submit">Submit</Button>
+                <Text color="red">{response ? response : ''}</Text>
+              </Stack>
             </Stack>
-          </Stack>
-        </form>
-      </Stack>
-    </Container>
+          </form>
+        </Stack>
+      </Container>
+    </Flex>
   );
 };
 
