@@ -4,7 +4,6 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  HStack,
   Heading,
   Input,
   InputGroup,
@@ -13,8 +12,6 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Resolver, useForm } from 'react-hook-form';
@@ -23,20 +20,24 @@ import * as yup from 'yup';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 type FormData = {
+  name: string;
   email: string;
   password: string;
+  passwordConfirmation: string;
 };
 
 const validationSchema = yup.object().shape({
+  name: yup.string().required('Name is required'),
   email: yup
     .string()
     .email('Invalid email address')
     .required('Email is required'),
 
   password: yup.string().required('Password is required'),
+  passwordConfirmation: yup.string(),
 });
 
-const Login = () => {
+const Register = () => {
   const {
     register,
     handleSubmit,
@@ -45,44 +46,60 @@ const Login = () => {
     resolver: yupResolver(validationSchema) as Resolver<FormData>,
   });
 
-  const [error, setError] = useState('');
+  const [response, setResponse] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
 
   const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
-    const res = await signIn('credentials', {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
+    const { password, passwordConfirmation } = data;
 
-    if (res?.ok) {
-      router.push('/');
+    if (passwordConfirmation === password) {
+      const res = await fetch('/api/createAccount', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (res?.ok) {
+        setResponse('Account created with success');
+        setTimeout(() => {
+          router.push('/');
+        }, 200);
+      } else {
+        setResponse('This email already exists ');
+      }
     } else {
-      setError('Invalid email or password');
+      setResponse("Passwords don't match");
     }
   };
   return (
     <Container maxW="md" py={{ base: '12', md: '24' }}>
       <Stack spacing="8">
-        <Stack spacing="6">
-          <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-            <Heading size={{ base: 'xs', md: 'sm' }}>
-              Log in to your account
-            </Heading>
-            <HStack spacing="1" justify="center">
-              <Text color="muted">Don&apos;t have an account?</Text>
-              <Link href="./create-account" style={{ color: 'blue' }}>
-                Sign up
-              </Link>
-            </HStack>
-          </Stack>
-        </Stack>
+        <Heading size={{ base: 'xs', md: 'sm' }}>Create an account</Heading>
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing="6">
             <Stack spacing="20px">
+              <FormControl id="name">
+                <FormLabel srOnly>Your name</FormLabel>
+                <Input
+                  {...register('name')}
+                  name="name"
+                  type="text"
+                  placeholder="name"
+                  roundedBottom="0"
+                />
+                <FormHelperText color="red">
+                  {errors?.email?.message}
+                </FormHelperText>
+              </FormControl>
               <FormControl id="email">
                 <FormLabel srOnly>Email address</FormLabel>
                 <Input
@@ -125,14 +142,41 @@ const Login = () => {
                   {errors?.password?.message}
                 </FormHelperText>
               </FormControl>
+              <FormControl id="passwordConfirmation">
+                <FormLabel srOnly>Confirm password</FormLabel>
+
+                <InputGroup>
+                  <Input
+                    {...register('passwordConfirmation')}
+                    name="passwordConfirmation"
+                    type={showPasswordConfirmation ? 'text' : 'password'}
+                    placeholder="Confirm password"
+                    roundedBottom="0"
+                  />
+                  <InputRightElement
+                    cursor="pointer"
+                    onClick={() =>
+                      showPasswordConfirmation
+                        ? setShowPasswordConfirmation(false)
+                        : setShowPasswordConfirmation(true)
+                    }
+                  >
+                    {showPasswordConfirmation ? (
+                      <AiOutlineEye />
+                    ) : (
+                      <AiOutlineEyeInvisible />
+                    )}
+                  </InputRightElement>
+                </InputGroup>
+                <FormHelperText color="red">
+                  {errors?.passwordConfirmation?.message}
+                </FormHelperText>
+              </FormControl>
             </Stack>
-            <Stack alignSelf="end">
-              {/* <Checkbox defaultChecked>Remember me</Checkbox> */}
-              <Link href="./reset-password">Forgot password?</Link>
-            </Stack>
+
             <Stack spacing="4">
-              <Button type="submit">Sign in</Button>
-              <Text color="red">{error ? error : ''}</Text>
+              <Button type="submit">Submit</Button>
+              <Text color="red">{response ? response : ''}</Text>
             </Stack>
           </Stack>
         </form>
@@ -141,4 +185,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
