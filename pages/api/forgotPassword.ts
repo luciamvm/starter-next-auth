@@ -31,6 +31,9 @@ export default async function forgotPassword(
   const userId = user._id.toString();
 
   // Send email
+
+  const root = process.env.ROOT_URL;
+
   const transporter = nodemailer.createTransport({
     port: 465,
 
@@ -50,7 +53,7 @@ export default async function forgotPassword(
     <h3>Hello ${user.name}</h3>
     <p>There was a request to change your password!</p>
     <p>Click the link below to proceed. </p>
-    <a target="_" href="127.0.0.1:3000/reset-password/${userId}">link</a>
+    <a target="_" href="${root}/reset-password/${userId}">link</a>
     <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
     `,
   };
