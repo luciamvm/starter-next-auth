@@ -1,6 +1,8 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+const root = process.env.ROOT_URL;
+
 const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -14,7 +16,7 @@ const authOptions: NextAuthOptions = {
           password: string;
         };
 
-        const res = await fetch('http://localhost:3000/api/login', {
+        const res = await fetch(`http://${root}/api/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -27,7 +29,6 @@ const authOptions: NextAuthOptions = {
         }
 
         return { id: '123', email: email };
-
       },
     }),
   ],
@@ -38,6 +39,7 @@ const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login',
   },
+  secret: process.env.JWT_SECRET,
 };
 
 export default NextAuth(authOptions);

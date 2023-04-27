@@ -12,30 +12,23 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Resolver, useForm } from 'react-hook-form';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import * as yup from 'yup';
 
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-
 type FormData = {
-  email: string;
   password: string;
+  passwordConfirmation: string;
 };
 
 const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email('Invalid email address')
-    .required('Email is required'),
-
   password: yup.string().required('Password is required'),
+  passwordConfirmation: yup.string(),
 });
 
-const Login = () => {
+const ResetPassword = () => {
   const {
     register,
     handleSubmit,
@@ -44,57 +37,52 @@ const Login = () => {
     resolver: yupResolver(validationSchema) as Resolver<FormData>,
   });
 
-  const [error, setError] = useState('');
-
+  const [response, setResponse] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
 
   const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
-    const res = await signIn('credentials', {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
+    const { password, passwordConfirmation } = data;
 
-    if (res?.ok) {
-      router.push('/');
+    const userId = router.query.userId;
+
+    if (passwordConfirmation === password) {
+      setResponse('Great');
+      const res = await fetch('/api/resetPassword', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: userId, password: password }),
+      });
+
+      if (res?.ok) {
+        router.push('/login');
+      } else {
+        setResponse('Something is wrong ');
+      }
     } else {
-      setError('Invalid email or password');
+      setResponse('Passwords are not equal');
     }
   };
+
   return (
     <Container maxW="md" py={{ base: '12', md: '24' }}>
       <Stack spacing="8">
         <Stack spacing="6">
           <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
             <Heading size={{ base: 'xs', md: 'sm' }}>
-              Log in to your account
+              Define your new password
             </Heading>
-            {/* <HStack spacing="1" justify="center">
-              <Text color="muted">Don't have an account?</Text>
-              <Button variant="link" colorScheme="blue">
-                Sign up
-              </Button>
-            </HStack> */}
           </Stack>
         </Stack>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing="6">
             <Stack spacing="20px">
-              <FormControl id="email">
-                <FormLabel srOnly>Email address</FormLabel>
-                <Input
-                  {...register('email')}
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  roundedBottom="0"
-                />
-                <FormHelperText color="red">
-                  {errors?.email?.message}
-                </FormHelperText>
-              </FormControl>
               <FormControl id="password">
                 <FormLabel srOnly>Password</FormLabel>
                 <InputGroup>
@@ -102,8 +90,8 @@ const Login = () => {
                     {...register('password')}
                     name="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Password"
-                    roundedTop="0"
+                    placeholder="New password"
+                    roundedBottom="0"
                   />
                   <InputRightElement
                     cursor="pointer"
@@ -124,14 +112,41 @@ const Login = () => {
                   {errors?.password?.message}
                 </FormHelperText>
               </FormControl>
+              <FormControl id="passwordConfirmation">
+                <FormLabel srOnly>Confirm password</FormLabel>
+
+                <InputGroup>
+                  <Input
+                    {...register('passwordConfirmation')}
+                    name="passwordConfirmation"
+                    type={showPasswordConfirmation ? 'text' : 'password'}
+                    placeholder="Confirm password"
+                    roundedBottom="0"
+                  />
+                  <InputRightElement
+                    cursor="pointer"
+                    onClick={() =>
+                      showPasswordConfirmation
+                        ? setShowPasswordConfirmation(false)
+                        : setShowPasswordConfirmation(true)
+                    }
+                  >
+                    {showPasswordConfirmation ? (
+                      <AiOutlineEye />
+                    ) : (
+                      <AiOutlineEyeInvisible />
+                    )}
+                  </InputRightElement>
+                </InputGroup>
+                <FormHelperText color="red">
+                  {errors?.passwordConfirmation?.message}
+                </FormHelperText>
+              </FormControl>
             </Stack>
-            <Stack alignSelf="end">
-              {/* <Checkbox defaultChecked>Remember me</Checkbox> */}
-              <Link href="./reset-password">Forgot password?</Link>
-            </Stack>
+
             <Stack spacing="4">
-              <Button type="submit">Sign in</Button>
-              <Text color="red">{error ? error : ''}</Text>
+              <Button type="submit">Send Request</Button>
+              <Text color="red">{response ? response : ''}</Text>
             </Stack>
           </Stack>
         </form>
@@ -140,4 +155,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;
