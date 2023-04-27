@@ -6,6 +6,8 @@ import {
   FormLabel,
   Heading,
   Input,
+  InputGroup,
+  InputRightElement,
   Stack,
   Text,
 } from '@chakra-ui/react';
@@ -16,6 +18,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Resolver, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 type FormData = {
   email: string;
@@ -41,6 +45,8 @@ const Login = () => {
   });
 
   const [error, setError] = useState('');
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
@@ -91,13 +97,29 @@ const Login = () => {
               </FormControl>
               <FormControl id="password">
                 <FormLabel srOnly>Password</FormLabel>
-                <Input
-                  {...register('password')}
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  roundedTop="0"
-                />
+                <InputGroup>
+                  <Input
+                    {...register('password')}
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Password"
+                    roundedTop="0"
+                  />
+                  <InputRightElement
+                    cursor="pointer"
+                    onClick={() =>
+                      showPassword
+                        ? setShowPassword(false)
+                        : setShowPassword(true)
+                    }
+                  >
+                    {showPassword ? (
+                      <AiOutlineEye />
+                    ) : (
+                      <AiOutlineEyeInvisible />
+                    )}
+                  </InputRightElement>
+                </InputGroup>
                 <FormHelperText color="red">
                   {errors?.password?.message}
                 </FormHelperText>
