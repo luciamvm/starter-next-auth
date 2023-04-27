@@ -10,16 +10,12 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Resolver, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 type FormData = {
   email: string;
-  password: string;
 };
 
 const validationSchema = yup.object().shape({
@@ -27,11 +23,9 @@ const validationSchema = yup.object().shape({
     .string()
     .email('Invalid email address')
     .required('Email is required'),
-
-  password: yup.string().required('Password is required'),
 });
 
-const Login = () => {
+const ForgotPassword = () => {
   const {
     register,
     handleSubmit,
@@ -40,37 +34,31 @@ const Login = () => {
     resolver: yupResolver(validationSchema) as Resolver<FormData>,
   });
 
-  const [error, setError] = useState('');
-
-  const router = useRouter();
+  const [response, setResponse] = useState('');
 
   const onSubmit = async (data: FormData) => {
-    const res = await signIn('credentials', {
-      email: data.email,
-      password: data.password,
-      redirect: false,
+    const res = await fetch('/api/forgotPassword', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
 
     if (res?.ok) {
-      router.push('/');
+      setResponse('You will recieve a reset email if that email exist');
     } else {
-      setError('Invalid email or password');
+      setResponse("That email isn't registered ");
     }
   };
+
   return (
     <Container maxW="md" py={{ base: '12', md: '24' }}>
       <Stack spacing="8">
         <Stack spacing="6">
           <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-            <Heading size={{ base: 'xs', md: 'sm' }}>
-              Log in to your account
-            </Heading>
-            {/* <HStack spacing="1" justify="center">
-              <Text color="muted">Don't have an account?</Text>
-              <Button variant="link" colorScheme="blue">
-                Sign up
-              </Button>
-            </HStack> */}
+            <Heading size={{ base: 'xs', md: 'sm' }}>Forgot Password</Heading>
           </Stack>
         </Stack>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -89,27 +77,11 @@ const Login = () => {
                   {errors?.email?.message}
                 </FormHelperText>
               </FormControl>
-              <FormControl id="password">
-                <FormLabel srOnly>Password</FormLabel>
-                <Input
-                  {...register('password')}
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  roundedTop="0"
-                />
-                <FormHelperText color="red">
-                  {errors?.password?.message}
-                </FormHelperText>
-              </FormControl>
             </Stack>
-            <Stack alignSelf="end">
-              {/* <Checkbox defaultChecked>Remember me</Checkbox> */}
-              <Link href="./reset-password">Forgot password?</Link>
-            </Stack>
+
             <Stack spacing="4">
-              <Button type="submit">Sign in</Button>
-              <Text color="red">{error ? error : ''}</Text>
+              <Button type="submit">Send Request</Button>
+              <Text color="red">{response ? response : ''}</Text>
             </Stack>
           </Stack>
         </form>
@@ -118,4 +90,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
