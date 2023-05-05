@@ -86,7 +86,7 @@ const Login = () => {
               </HStack>
             </Stack>
           </Stack>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form method="post" onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={6}>
               <Stack spacing="20px">
                 <FormControl id="email">
