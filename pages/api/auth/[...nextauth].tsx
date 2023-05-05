@@ -6,6 +6,7 @@ const root = process.env.ROOT_URL;
 const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
+      id: 'credentials-login',
       type: 'credentials',
 
       credentials: {},
