@@ -33,9 +33,28 @@ const authOptions: NextAuthOptions = {
     }),
   ],
 
+  // callbacks: {
+  //   session({ session, token, user }) {
+  //     return session; // The return type will match the one returned in `useSession()`
+  //   },
+  // },
+
   callbacks: {
-    session({ session, token, user }) {
-      return session; // The return type will match the one returned in `useSession()`
+    async jwt({ token, user, account }) {
+      if (account && user) {
+        return {
+          ...token,
+          // accessToken: user.token,
+          // refreshToken: user.refreshToken,
+        };
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.user = token;
+      return session;
     },
   },
 
