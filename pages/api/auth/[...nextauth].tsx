@@ -28,10 +28,16 @@ const authOptions: NextAuthOptions = {
           return null;
         }
 
-        return { id: '123', email: email };
+        return { id: '1', email: email };
       },
     }),
   ],
+
+  callbacks: {
+    session({ session, token, user }) {
+      return session; // The return type will match the one returned in `useSession()`
+    },
+  },
 
   session: {
     strategy: 'jwt',
