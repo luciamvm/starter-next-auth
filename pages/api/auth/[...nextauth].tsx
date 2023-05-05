@@ -27,9 +27,9 @@ const authOptions: NextAuthOptions = {
 
         if (res.status === 401) {
           return null;
+        } else {
+          return { id: '1', email: email };
         }
-
-        return { id: '1', email: email };
       },
     }),
   ],
