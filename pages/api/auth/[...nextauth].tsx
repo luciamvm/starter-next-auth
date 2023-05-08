@@ -16,7 +16,7 @@ const authOptions: NextAuthOptions = {
           password: string;
         };
 
-        const res = await fetch(`http://${root}/api/login`, {
+        const res = await fetch(`${root}/api/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
