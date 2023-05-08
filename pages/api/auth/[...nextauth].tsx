@@ -16,19 +16,25 @@ const authOptions: NextAuthOptions = {
           password: string;
         };
 
-        const res = await fetch(`http://${root}/api/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(credentials),
-        });
+        // const res = await fetch(`http://${root}/api/login`, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify(credentials),
+        // });
 
-        if (res.status === 401) {
-          return null;
-        } else {
+        if (email === 'lucia@spic.pt' && password === 'lucia') {
           return { id: '1', email: email };
+        } else {
+          return null;
         }
+
+        // if (res.status === 401) {
+        //   return null;
+        // } else {
+        //   return { id: '1', email: email };
+        // }
       },
     }),
   ],
