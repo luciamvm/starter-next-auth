@@ -6,7 +6,6 @@ const root = process.env.ROOT_URL;
 const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      id: 'credentials-login',
       type: 'credentials',
 
       credentials: {},
@@ -41,6 +40,9 @@ const authOptions: NextAuthOptions = {
   // },
 
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true;
+    },
     async jwt({ token, user, account }) {
       if (account && user) {
         return {
@@ -49,10 +51,8 @@ const authOptions: NextAuthOptions = {
           // refreshToken: user.refreshToken,
         };
       }
-
       return token;
     },
-
     async session({ session, token }) {
       session.user = token;
       return session;

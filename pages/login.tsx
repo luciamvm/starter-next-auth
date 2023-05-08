@@ -53,11 +53,13 @@ const Login = () => {
   const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
-    const res = await signIn('1', {
+    const res = await signIn('credentials', {
       email: data.email,
       password: data.password,
       redirect: false,
     });
+
+    console.log('res', res);
 
     if (res?.ok) {
       router.push('/');
