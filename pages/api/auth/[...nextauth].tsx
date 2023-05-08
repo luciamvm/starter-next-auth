@@ -16,54 +16,22 @@ const authOptions: NextAuthOptions = {
           password: string;
         };
 
-        // const res = await fetch(`http://${root}/api/login`, {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify(credentials),
-        // });
+        const res = await fetch(`http://${root}/api/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(credentials),
+        });
 
-        if (email === 'lucia@spic.pt' && password === 'lucia') {
-          return { id: '1', email: email };
-        } else {
+        if (res.status === 401) {
           return null;
+        } else {
+          return { id: '1', email: email };
         }
-
-        // if (res.status === 401) {
-        //   return null;
-        // } else {
-        //   return { id: '1', email: email };
-        // }
       },
     }),
   ],
-
-  // callbacks: {
-  //   session({ session, token, user }) {
-  //     return session; // The return type will match the one returned in `useSession()`
-  //   },
-  // },
-
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      return true;
-    },
-    async jwt({ token, user, account }) {
-      if (account && user) {
-        return {
-          ...token,
-          // accessToken: user.token,
-          // refreshToken: user.refreshToken,
-        };
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      session.user = token;
-      return session;
-    },
-  },
 
   session: {
     strategy: 'jwt',
