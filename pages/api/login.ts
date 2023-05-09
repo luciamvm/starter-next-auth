@@ -18,9 +18,13 @@ export default async function login(
   const { email, password } = req.body;
 
   const client = await clientPromise;
+  console.log('client', client);
   const db = client.db('users');
+  console.log('db', db);
   const usersCollection = db.collection('users');
+  console.log('usersCollection', usersCollection);
   const user = await usersCollection.findOne({ email });
+  console.log('user', user);
 
   if (!user) {
     res.status(401).json({ success: false });
