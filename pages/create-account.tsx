@@ -103,6 +103,7 @@ const Register = () => {
                     name="name"
                     type="text"
                     placeholder="Name"
+                    autoComplete="given-name"
                   />
                   <FormHelperText color="red">
                     {errors?.email?.message}
@@ -115,6 +116,7 @@ const Register = () => {
                     name="email"
                     type="email"
                     placeholder="Email"
+                    autoComplete="email"
                   />
                   <FormHelperText color="red">
                     {errors?.email?.message}
@@ -128,6 +130,7 @@ const Register = () => {
                       name="password"
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Password"
+                      autoComplete="new-password"
                     />
                     <InputRightElement
                       cursor="pointer"
@@ -157,6 +160,7 @@ const Register = () => {
                       name="passwordConfirmation"
                       type={showPasswordConfirmation ? 'text' : 'password'}
                       placeholder="Confirm password"
+                      autoComplete="new-password"
                     />
                     <InputRightElement
                       cursor="pointer"

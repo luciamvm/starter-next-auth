@@ -87,6 +87,8 @@ const ResetPassword = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing="6">
               <Stack spacing="20px">
+                <Input type="text" autoComplete="given-name" hidden />
+
                 <FormControl id="password">
                   <FormLabel srOnly>Password</FormLabel>
                   <InputGroup>
@@ -95,6 +97,7 @@ const ResetPassword = () => {
                       name="password"
                       type={showPassword ? 'text' : 'password'}
                       placeholder="New password"
+                      autoComplete="new-password"
                     />
                     <InputRightElement
                       cursor="pointer"
@@ -124,6 +127,7 @@ const ResetPassword = () => {
                       name="passwordConfirmation"
                       type={showPasswordConfirmation ? 'text' : 'password'}
                       placeholder="Confirm password"
+                      autoComplete="new-password"
                     />
                     <InputRightElement
                       cursor="pointer"

@@ -77,6 +77,7 @@ const ForgotPassword = () => {
                     name="email"
                     type="email"
                     placeholder="Email"
+                    autoComplete="email"
                   />
                   <FormHelperText color="red">
                     {errors?.email?.message}

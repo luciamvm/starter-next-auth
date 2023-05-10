@@ -96,6 +96,7 @@ const Login = () => {
                     name="email"
                     type="email"
                     placeholder="Email"
+                    autoComplete="email"
                   />
                   <FormHelperText color="red">
                     {errors?.email?.message}
@@ -109,6 +110,7 @@ const Login = () => {
                       name="password"
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Password"
+                      autoComplete="current-password"
                     />
                     <InputRightElement
                       cursor="pointer"
