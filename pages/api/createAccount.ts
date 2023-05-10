@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from './../../lib/mongodb';
+const bcrypt = require('bcrypt');
 
 type Data = {
   success: boolean;
@@ -15,12 +16,15 @@ export default async function createAccount(
     return;
   }
 
-  const { name, email, password } = req.body;
+  let { name, email, password } = req.body;
 
   const client = await clientPromise;
   const db = client.db('users');
   const usersCollection = db.collection('users');
   const user = await usersCollection.findOne({ email });
+
+  const salt = await bcrypt.genSalt(10);
+  password = await bcrypt.hash(password, salt);
 
   if (!user) {
     // Create a new user

@@ -1,7 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
 
-import { ObjectId } from "mongodb";
-import clientPromise from "./../../lib/mongodb";
+import { ObjectId } from 'mongodb';
+import clientPromise from './../../lib/mongodb';
+
+const bcrypt = require('bcrypt');
 
 type Data = {
   success: boolean;
@@ -12,16 +14,20 @@ export default async function resetPassword(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     res.status(405).json({ success: false });
     return;
   }
 
-  const { id, password } = req.body;
+  let { id, password } = req.body;
 
   const client = await clientPromise;
-  const db = client.db("users");
-  const usersCollection = db.collection("users");
+  const db = client.db('users');
+  const usersCollection = db.collection('users');
+
+  const salt = await bcrypt.genSalt(10);
+  password = await bcrypt.hash(password, salt);
+
   try {
     const user = await usersCollection.findOneAndUpdate(
       {
