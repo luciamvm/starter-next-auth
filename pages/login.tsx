@@ -59,8 +59,6 @@ const Login = () => {
       redirect: false,
     });
 
-    console.log('res', res);
-
     if (res?.ok) {
       router.push('/');
     } else {
