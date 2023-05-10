@@ -23,11 +23,12 @@ const authOptions: NextAuthOptions = {
           },
           body: JSON.stringify(credentials),
         });
+        const user = await res.json();
 
         if (res.status === 401) {
           return null;
         } else {
-          return { id: '1', email: email };
+          return user.result;
         }
       },
     }),
